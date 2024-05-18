@@ -1,32 +1,43 @@
+import Button from "@/components/Button";
 import useMovies from "@/hooks/useMovies";
 import AppLayout from "@/layouts/AppLayout";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 export default function Home() {
-  const { movies } = useMovies()
+  const { movies, isLoading } = useMovies()
 
   return (
     <AppLayout>
-      <main className="max-w-7xl mx-auto px-5 py-20">
-        <h1 className="mb-5">Starwars App</h1>
+        <h2 className="mb-5 text-xl font-medium">Movies</h2>
 
-        <div className="grid grid-cols-4 gap-2">
-          {movies && (
+        <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:md:grid-cols-6">
+          {movies && !isLoading ? (
             movies.map((movie) => {
               const movieId = movie.url.split('films/')[1].replace('/', '')
 
               return (
-                <div className="bg-slate-700 p-5">
-                  <p>{movie.title}</p>
+                <div>
+                  <div className="aspect-[1/1.4] relative">
+                    <Image className="object-cover" src={`/assets/images/movies/${movieId}.jpg`} fill alt={movie.title} />
+                  </div>
 
-                  <Link href={`/movies/${movieId}`}>Link</Link>
+                  <div className="bg-neutral-800 p-5">
+                    <Link href={`/movies/${movieId}`} className="mb-5 block">{movie.title}</Link>
+
+                    <Button href={`/movies/${movieId}`}>Read more</Button>
+                  </div>
                 </div>
               )
             })
+          ) : (
+            [...Array(6)].map((element, itemIndex) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <div className="bg-neutral-800 aspect-[1/1.8]"></div>
+            ))
           )}
         </div>
-      </main>
     </AppLayout>
   );
 }

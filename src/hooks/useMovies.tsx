@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 
 const useMovies = () => {
   const [movies, setMovies] = useState<undefined | Movie[]>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchMovies = async () => {
+    setIsLoading(true)
+
     const result = await starWarsClient<Movies>({
       endpoint: '/films'
     })
@@ -13,6 +16,8 @@ const useMovies = () => {
     if (result.data) {
       setMovies(result.data.results)
     }
+
+    setIsLoading(false)
   }
 
 
@@ -21,7 +26,8 @@ const useMovies = () => {
   }, [])
 
   return {
-    movies
+    movies,
+    isLoading
   }
 }
 
