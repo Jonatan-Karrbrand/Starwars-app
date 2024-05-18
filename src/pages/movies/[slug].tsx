@@ -1,18 +1,19 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import { GetStaticPaths, GetStaticProps } from "next";
 import starWarsClient from "@/clients/starWarsClient";
 import { Movie, Movies } from "@/types/movies";
+import AppLayout from "@/layouts/AppLayout";
 
 type Props = {
-  movie?: Movie
+  movie: Movie
 }
 
 export default function Movie({ movie } : Props) {
   return (
-    <main>
-      {movie?.title}
-    </main>
+    <AppLayout>
+      <div>
+        {movie?.title}
+      </div>
+    </AppLayout>
   );
 }
 
@@ -21,9 +22,15 @@ export const getStaticProps: GetStaticProps = async ({ params, preview = false, 
     endpoint: `/films/${params?.slug}`
   })
 
+  if (!result.data) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
-      movie: result.data ? result.data : undefined
+      movie: result.data
     },
   };
 };
@@ -37,10 +44,10 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     const movieId = movie.url.split('films/')[1].replace('/', '')
 
     return `/movies/${movieId}`
-  }) :[]
+  }) : []
 
   return {
     paths,
-    fallback: 'blocking',
+    fallback: false,
   };
 };
