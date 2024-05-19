@@ -1,12 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import starWarsClient from "@/clients/starWarsClient";
-import { Character, Characters, Movie, Movies } from "@/types";
+import { Character as CharacterType, Characters, Movies } from "@/types";
 import AppLayout from "@/layouts/AppLayout";
 import Image from "next/image";
 import { useEffect } from "react";
 
 type Props = {
-  character: Character
+  character: CharacterType
 }
 
 export default function Character({ character } : Props) {
@@ -62,7 +62,7 @@ export const getStaticProps: GetStaticProps = async ({ params, preview = false, 
 };
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-  let allCharacters:Character[] = [];
+  let allCharacters:CharacterType[] = [];
   let nextUrl:string | null = '';
 
   while (nextUrl !== null) {

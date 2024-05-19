@@ -1,12 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import starWarsClient from "@/clients/starWarsClient";
-import { Movie, Movies } from "@/types";
+import { Movie as MovieType, Movies } from "@/types";
 import AppLayout from "@/layouts/AppLayout";
 import Image from "next/image";
 import { useEffect } from "react";
 
 type Props = {
-  movie: Movie
+  movie: MovieType
 }
 
 export default function Movie({ movie } : Props) {

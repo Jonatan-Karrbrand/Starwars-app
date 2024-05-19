@@ -10,10 +10,10 @@ export default function AppLayout({ children } : Props) {
   return (
     <>
       <header>
-        <Container className="py-5 flex flex-col items-center space-y-5">
-            <Link href={"/"}>
-              <Logo />
-            </Link>
+        <Container className="pt-12 pb-5 flex flex-col items-center space-y-5">
+          <Link href={"/"}>
+            <Logo />
+          </Link>
 
           <ul className="flex space-x-10">
             <li><Link href={"/"}>Home</Link></li>

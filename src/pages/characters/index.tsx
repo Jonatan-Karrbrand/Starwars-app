@@ -2,7 +2,7 @@ import starWarsClient from "@/clients/starWarsClient";
 import Button from "@/components/Button";
 import useCharacters from "@/hooks/useCharacters";
 import AppLayout from "@/layouts/AppLayout";
-import { Character, Characters } from "@/types";
+import { Character, Characters as CharactersType } from "@/types";
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,14 +21,14 @@ export default function Characters({allCharacters} : Props) {
 
       <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:md:grid-cols-6">
         {characters?.length > 0 && (
-          characters.map((character) => {
+          characters.map((character, index) => {
             const characterId = character.url.split('people/')[1].replace('/', '')
 
             return (
               <div>
                 <div className="aspect-[1/1.4] relative">
                   <Link className="flex h-full" href={`/characters/${characterId}`}>
-                    <Image height={500} width={500} className="object-cover" src={`/assets/images/people/${characterId}.jpg`} alt={character.name} />
+                    <Image priority={index < 12} height={500} width={500} className="object-cover" src={`/assets/images/people/${characterId}.jpg`} alt={character.name} />
                   </Link>
                 </div>
 
@@ -65,7 +65,7 @@ export const getStaticProps: GetStaticProps = async () => {
   while (nextUrl !== null) {
     const nextPageId:string = nextUrl?.split('?')[1]
 
-    const result = await starWarsClient<Characters>({
+    const result = await starWarsClient<CharactersType>({
       endpoint: `/people${nextPageId ? `?${nextPageId}` : ''}`
     })
 
