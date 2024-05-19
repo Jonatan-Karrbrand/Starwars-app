@@ -18,7 +18,7 @@ export default function AppLayout({ children } : Props) {
           <ul className="flex space-x-10">
             <li><Link href={"/"}>Home</Link></li>
 
-            <li><Link href={"/movies"}>Movies</Link></li>
+            <li><Link href={"/characters"}>Characters</Link></li>
           </ul>
         </Container>
       </header>

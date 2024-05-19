@@ -1,7 +1,9 @@
+import AppLayout from "@/layouts/AppLayout";
+
 export default function MissingPage() {
   return (
-    <main>
-      <h1 className="mb-5">404</h1>
-    </main>
+    <AppLayout>
+      <h2 className="mb-5 text-xl font-medium">404</h2>
+    </AppLayout>
   );
 }

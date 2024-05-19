@@ -1,5 +1,5 @@
 import starWarsClient from "@/clients/starWarsClient";
-import { Movie, Movies } from "@/types/movies";
+import { Movie, Movies } from "@/types";
 import { useEffect, useState } from "react";
 
 const useMovies = () => {
@@ -7,17 +7,22 @@ const useMovies = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchMovies = async () => {
-    setIsLoading(true)
+    try {
+      setIsLoading(true)
 
-    const result = await starWarsClient<Movies>({
-      endpoint: '/films'
-    })
+      const result = await starWarsClient<Movies>({
+        endpoint: '/films'
+      })
 
-    if (result.data) {
-      setMovies(result.data.results)
+      if (result.data) {
+        setMovies(result.data.results)
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error, 'error')
     }
-
-    setIsLoading(false)
   }
 
 
