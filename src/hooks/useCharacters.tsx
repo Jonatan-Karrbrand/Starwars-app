@@ -1,38 +1,14 @@
-import starWarsClient from "@/clients/starWarsClient";
-import characters from "@/pages/characters";
-import { Character, Characters } from "@/types";
+import { Character } from "@/types";
 import { useEffect, useState } from "react";
 
-const useCharacters = () => {
+const useCharacters = (allCharacters: Character[]) => {
   const [characters, setCharacters] = useState<Character[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchCharacters = async () => {
+  const filterCharacters = async () => {
     try {
-      setIsLoading(true);
-
-      let allCharacters:Character[] = [];
-      let nextUrl:string | null = '';
-
-      while (nextUrl !== null) {
-        const nextPageId:string = nextUrl?.split('?')[1]
-
-        const result = await starWarsClient<Characters>({
-          endpoint: `/people${nextPageId ? `?${nextPageId}` : ''}`
-        })
-
-        if (result.data) {
-          allCharacters = [...allCharacters, ...result.data.results];
-
-          nextUrl = result.data.next;
-        }
-      }
-
       const clickedMoviesLocalStorage = localStorage.getItem('clicked_movies') ?? '';
 
       if (!clickedMoviesLocalStorage) {
-        setIsLoading(false);
-
         return;
       }
 
@@ -47,20 +23,17 @@ const useCharacters = () => {
       });
 
       setCharacters(filteredCharacters);
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       console.log(error, 'error')
     }
   }
 
   useEffect(() => {
-    fetchCharacters()
-  }, [])
+    filterCharacters()
+  }, [allCharacters])
 
   return {
     characters,
-    isLoading
   }
 }
 

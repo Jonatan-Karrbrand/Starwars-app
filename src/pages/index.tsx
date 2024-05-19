@@ -5,15 +5,18 @@ import { Movie, Movies } from "@/types";
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 type Props = {
   movies: Movie[]
 }
 
 export default function Home({ movies }: Props) {
+  const [moviesCleared, setMoviesCleared] = useState(false);
+
   const handleClearClickedMovies = () => {
     localStorage.removeItem('clicked_movies');
+    setMoviesCleared(true)
   }
 
   return (
@@ -27,7 +30,7 @@ export default function Home({ movies }: Props) {
           return (
             <div>
               <div className="aspect-[1/1.4] relative">
-                <Link href={`/movies/${movieId}`}>
+                <Link className="flex h-full" href={`/movies/${movieId}`}>
                   <Image height={500} width={500}  className="object-cover" src={`/assets/images/movies/${movieId}.jpg`} alt={movie.title} />
                 </Link>
               </div>
@@ -42,12 +45,18 @@ export default function Home({ movies }: Props) {
         })}
       </div>
 
-      <button
-        className="text-sm uppercase tracking-wider font-bold mt-20"
-        onClick={handleClearClickedMovies}
-      >
-        Clear clicked movies
-      </button>
+      <div className="mt-20">
+        {moviesCleared ? (
+          <p>Movies are cleared</p>
+        ) : (
+          <button
+            className="text-sm uppercase tracking-wider font-bold"
+            onClick={handleClearClickedMovies}
+          >
+            Clear clicked movies
+          </button>
+        )}
+      </div>
     </AppLayout>
   );
 }
