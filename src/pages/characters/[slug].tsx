@@ -42,6 +42,7 @@ export default function Character({ character } : Props) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  // fetch the character
   const result = await starWarsClient<Movies>({
     endpoint: `/people/${params?.slug}`
   });
@@ -63,6 +64,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   let allCharacters:CharacterType[] = [];
   let nextUrl:string | null = '';
 
+  // fetch all character pages serverside
   while (nextUrl !== null) {
     const nextPageId:string = nextUrl?.split('?')[1];
 

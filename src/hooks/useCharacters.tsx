@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 const useCharacters = (allCharacters: Character[]) => {
   const [characters, setCharacters] = useState<Character[]>([]);
 
+  // filter out non clicked movie characters
   const filterCharacters = () => {
     const clickedMoviesLocalStorage = localStorage.getItem('clicked_movies') ?? '';
 

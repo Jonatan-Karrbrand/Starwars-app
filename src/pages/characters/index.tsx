@@ -63,6 +63,7 @@ export const getStaticProps: GetStaticProps = async () => {
   let allCharacters:Character[] = [];
   let nextUrl:string | null = '';
 
+  // fetch all characters serverside
   while (nextUrl !== null) {
     const nextPageId:string = nextUrl?.split('?')[1];
 

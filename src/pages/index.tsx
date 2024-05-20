@@ -63,6 +63,7 @@ export default function Home({ movies }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
+  // fetch all movies
   const result = await starWarsClient<Movies>({
     endpoint: '/films'
   });

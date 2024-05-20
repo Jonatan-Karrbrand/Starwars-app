@@ -11,7 +11,7 @@ type Props = {
 }
 
 export default function Movie({ movie } : Props) {
-  const movieId = getMovieId(movie)
+  const movieId = getMovieId(movie);
 
   const setLocalStorage = (value: string[]) => {
     localStorage.setItem('clicked_movies', JSON.stringify(value));
@@ -62,6 +62,7 @@ export default function Movie({ movie } : Props) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  // fetch the movie
   const result = await starWarsClient<Movies>({
     endpoint: `/films/${params?.slug}`
   });
@@ -80,6 +81,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  // fetch all movie pages serverside
   const result = await starWarsClient<Movies>({
     endpoint: '/films'
   });
