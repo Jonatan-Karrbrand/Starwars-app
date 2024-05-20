@@ -4,32 +4,28 @@ import { useEffect, useState } from "react";
 const useCharacters = (allCharacters: Character[]) => {
   const [characters, setCharacters] = useState<Character[]>([]);
 
-  const filterCharacters = async () => {
-    try {
-      const clickedMoviesLocalStorage = localStorage.getItem('clicked_movies') ?? '';
+  const filterCharacters = () => {
+    const clickedMoviesLocalStorage = localStorage.getItem('clicked_movies') ?? '';
 
-      if (!clickedMoviesLocalStorage) {
-        return;
-      }
-
-      const clickedMovies = JSON.parse(clickedMoviesLocalStorage);
-      const clickedMoviesSet = new Set(clickedMovies);
-
-      const filteredCharacters = allCharacters.filter((character) => {
-        return character.films.some((movie) => {
-          const movieId = movie.split('films/')[1].replace('/', '');
-          return clickedMoviesSet.has(movieId);
-        });
-      });
-
-      setCharacters(filteredCharacters);
-    } catch (error) {
-      console.log(error, 'error')
+    if (!clickedMoviesLocalStorage) {
+      return;
     }
+
+    const clickedMovies = JSON.parse(clickedMoviesLocalStorage);
+    const clickedMoviesSet = new Set(clickedMovies);
+
+    const filteredCharacters = allCharacters.filter((character) => {
+      return character.films.some((movie) => {
+        const movieId = movie.split('films/')[1].replace('/', '');
+        return clickedMoviesSet.has(movieId);
+      });
+    });
+
+    setCharacters(filteredCharacters);
   }
 
   useEffect(() => {
-    filterCharacters()
+    filterCharacters();
   }, [allCharacters])
 
   return {

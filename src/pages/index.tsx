@@ -1,5 +1,6 @@
 import starWarsClient from "@/clients/starWarsClient";
 import Button from "@/components/Button";
+import { getMovieId } from "@/helpers/process-data";
 import AppLayout from "@/layouts/AppLayout";
 import { Movie, Movies } from "@/types";
 import { GetStaticProps } from "next";
@@ -16,7 +17,7 @@ export default function Home({ movies }: Props) {
 
   const handleClearClickedMovies = () => {
     localStorage.removeItem('clicked_movies');
-    setMoviesCleared(true)
+    setMoviesCleared(true);
   }
 
   return (
@@ -25,7 +26,7 @@ export default function Home({ movies }: Props) {
 
       <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:md:grid-cols-6">
         {movies.map((movie) => {
-          const movieId = movie.url.split('films/')[1].replace('/', '')
+          const movieId = getMovieId(movie);
 
           return (
             <div>
@@ -64,13 +65,13 @@ export default function Home({ movies }: Props) {
 export const getStaticProps: GetStaticProps = async () => {
   const result = await starWarsClient<Movies>({
     endpoint: '/films'
-  })
+  });
 
   if (!result.data) {
     return {
       notFound: true,
     };
-  }
+  };
 
   return {
     props: {

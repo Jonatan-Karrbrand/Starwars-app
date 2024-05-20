@@ -4,13 +4,14 @@ import { Movie as MovieType, Movies } from "@/types";
 import AppLayout from "@/layouts/AppLayout";
 import Image from "next/image";
 import { useEffect } from "react";
+import { getMovieId } from "@/helpers/process-data";
 
 type Props = {
   movie: MovieType
 }
 
 export default function Movie({ movie } : Props) {
-  const movieId = movie.url.split('films/')[1].replace('/', '')
+  const movieId = getMovieId(movie)
 
   const setLocalStorage = (value: string[]) => {
     localStorage.setItem('clicked_movies', JSON.stringify(value));
@@ -20,24 +21,24 @@ export default function Movie({ movie } : Props) {
     const clickedMoviesLocalStorage = localStorage.getItem('clicked_movies');
 
     if (!clickedMoviesLocalStorage) {
-      setLocalStorage([movieId])
+      setLocalStorage([movieId]);
 
       return;
     }
 
     const clickedMovies = JSON.parse(clickedMoviesLocalStorage);
-    const isMovieInLocalStorage = clickedMovies.find((movie: string) => movie === movieId)
+    const isMovieInLocalStorage = clickedMovies.find((movie: string) => movie === movieId);
 
     if (!isMovieInLocalStorage) {
-      const mergedMovies = [...clickedMovies, movieId]
+      const mergedMovies = [...clickedMovies, movieId];
 
-      setLocalStorage(mergedMovies)
+      setLocalStorage(mergedMovies);
     }
   }, [])
 
   return (
     <AppLayout>
-      <div className="flex flex-col gap-12 max-w-5xl mx-auto  md:flex-row">
+      <div className="flex flex-col gap-12 max-w-5xl mx-auto md:flex-row">
         <div className="aspect-[1/1.4] relative md:w-1/3">
           <Image priority className="object-cover" src={`/assets/images/movies/${movieId}.jpg`} fill alt={movie.title} />
         </div>
@@ -53,17 +54,17 @@ export default function Movie({ movie } : Props) {
             <li>Director: {movie.director}</li>
           </ul>
 
-          <p className="">{movie.opening_crawl}</p>
+          <p>{movie.opening_crawl}</p>
         </div>
       </div>
     </AppLayout>
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params, preview = false, locale }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const result = await starWarsClient<Movies>({
     endpoint: `/films/${params?.slug}`
-  })
+  });
 
   if (!result.data) {
     return {
@@ -78,16 +79,14 @@ export const getStaticProps: GetStaticProps = async ({ params, preview = false, 
   };
 };
 
-export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const result = await starWarsClient<Movies>({
-    endpoint:'/films'
-  })
+    endpoint: '/films'
+  });
 
   const paths = result.data ? result.data.results.map((movie) => {
-    const movieId = movie.url.split('films/')[1].replace('/', '')
-
-    return `/movies/${movieId}`
-  }) : []
+    return `/movies/${getMovieId(movie)}`;
+  }) : [];
 
   return {
     paths,

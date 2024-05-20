@@ -6,7 +6,7 @@ type Props = {
   className?: string
 }
 
-export default function Container({ children, href, className } : Props) {
+export default function Button({ children, href, className } : Props) {
   return (
     <Link href={href} className={`text-sm uppercase tracking-wider font-bold inline-block animated-button pb-1 ${className ?? ''}`}>
       {children}

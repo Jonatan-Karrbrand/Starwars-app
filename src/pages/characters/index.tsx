@@ -1,5 +1,6 @@
 import starWarsClient from "@/clients/starWarsClient";
 import Button from "@/components/Button";
+import { getCharacterId } from "@/helpers/process-data";
 import useCharacters from "@/hooks/useCharacters";
 import AppLayout from "@/layouts/AppLayout";
 import { Character, Characters as CharactersType } from "@/types";
@@ -22,7 +23,7 @@ export default function Characters({allCharacters} : Props) {
       <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:md:grid-cols-6">
         {characters?.length > 0 && (
           characters.map((character, index) => {
-            const characterId = character.url.split('people/')[1].replace('/', '')
+            const characterId = getCharacterId(character)
 
             return (
               <div>
@@ -63,11 +64,11 @@ export const getStaticProps: GetStaticProps = async () => {
   let nextUrl:string | null = '';
 
   while (nextUrl !== null) {
-    const nextPageId:string = nextUrl?.split('?')[1]
+    const nextPageId:string = nextUrl?.split('?')[1];
 
     const result = await starWarsClient<CharactersType>({
       endpoint: `/people${nextPageId ? `?${nextPageId}` : ''}`
-    })
+    });
 
     if (result.data) {
       allCharacters = [...allCharacters, ...result.data.results];
